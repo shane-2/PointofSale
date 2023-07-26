@@ -5,32 +5,35 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace PointofSale
+    
 {
-    internal class ItemType
+    internal class Merchandise
     {
         //properties
         public decimal Price { get; set; }
         //Small, Medium, Large
         public string Size { get; set; }
+        public string Type { get; set; }
         //public bool Shipped { get; set; }
 
         //constructors
-        public ItemType(decimal _price, string _size)
+        public Merchandise(decimal _price, string _size, string _type)
         {
             Price = _price;
             //Shipped = _shipped;
             Size = _size;
+            Type = _type;
         }
 
         //methods
         public override string ToString()
         {
-            return $"{Price}";
+            return $"${Price} {Type}";
         }
 
         public string Shipped(string size)
         {
-            if (size == "Large")
+            if (Size == "Large")
             {
                 return "Do you want this item shipped?";
             }
