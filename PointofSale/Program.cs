@@ -9,6 +9,8 @@
 // Instruments(type(percussion, string, woodwind, brass), brand(Gibson, Fender, Yamaha, Kawai)) 
 
 using PointofSale;
+
+
 using System.ComponentModel.Design;
 //List for shopping cart
 List<Merchandise> shopCart = new List<Merchandise>();
@@ -47,11 +49,10 @@ new Clothing(4.95m,"Small","Tigers Hat","Clothing","Summer","L","Blue"),
 new Clothing(14.95m,"Small","Morph Suit","Clothing","All Season","XXS","Neon Green"),
 new Clothing(9.95m,"Medium","Snowpants","Clothing","Winter", "XXL","Camoflauge")
 };
+
 bool runProgram = true;
 while (runProgram)
 {
-    
-
     int menuChoice = 0;
     while (menuChoice <= 0 || menuChoice >= 5)
     {
@@ -101,9 +102,27 @@ while (runProgram)
 
         }
 
-
-
-
+        bool runProgram2 = true;
+        while (runProgram2)
+        {
+            Console.WriteLine("Are you ready to check out? Enter y/n");
+            string yesno = Console.ReadLine().ToLower().Trim();
+            if (yesno == "y")
+            {
+                runProgram = false;
+                runProgram2 = false;
+                menuChoice = 1;
+            }
+            else if (yesno == "n")
+            {
+                runProgram = true;
+                runProgram2 = false;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input");
+            }
+        }
         
     }
     //have user choose item via number
@@ -119,6 +138,21 @@ while (runProgram)
 
     //display receipt, items, totals, 
 }
+    
+
+Console.WriteLine("How would you like to pay? Enter:");Console.WriteLine("1 for Cash");Console.WriteLine("2 for Check");Console.WriteLine("3 for Credit");int input = int.Parse(Console.ReadLine());
+
+decimal subtotal = 0;
+foreach (Merchandise t in shopCart)
+{
+    subtotal += t.Price;
+}
+decimal salestax = Math.Round(subtotal, 2) * 0.06m;
+decimal grandtotal = (subtotal + salestax);
+
+bool runPayment = true;while (runPayment){    if (input == 1)    {        Console.WriteLine("Enter the amount of cash tendered");        decimal cash = decimal.Parse(Console.ReadLine());        decimal change = cash - grandtotal;        Console.WriteLine($"{change} is your change, thank you for shopping with us!");    }    if (input == 2)    {        Console.WriteLine("Please enter your check number for payment");        Console.ReadLine();        Console.WriteLine("Thank you for shopping with us!");    }    if (input == 3)    {        Console.WriteLine("Please enter your card number, expiration date, and CVV");        Console.ReadLine();        Console.WriteLine("Thank you for shopping with us!");    }    else    {        Console.WriteLine("Not a valid choice. Try again.");    }
+}
+
     //methods
     static void DisplayMenu(List<Merchandise> inventory)
     {
@@ -230,14 +264,3 @@ while (runProgram)
             return false;
         }
     }
-
-
-//if time try storing in file
-//(Moderate) Store your list of products in a text file and then include an option to add to the product list, which then outputs to the product file.
-
-
-//Console.WriteLine("How would you like to pay? Enter:");//Console.WriteLine("1 for Cash");//Console.WriteLine("2 for Check");//Console.WriteLine("3 for Credit");//int input = int.Parse(Console.ReadLine());
-
-//bool runProgram = true;//while (runProgram)//{//    if (input == 1)//    {//        Console.WriteLine("Enter the amount of cash tendered");//        double cash = double.Parse(Console.ReadLine());//        double change = cash - total;//        Console.WriteLine($"{change} is your change, thank you for shopping with us!");//    }//    if (input == 2)//    {//        Console.WriteLine("Please enter your check number for payment");//        Console.ReadLine();//        Console.WriteLine("Thank you for shopping with us!");//    }//    if (input == 3)//    {//        Console.WriteLine("Please enter your card number, expiration date, and CVV");//        Console.ReadLine();//        Console.WriteLine("Thank you for shopping with us!");//    }//    else//    {//        Console.WriteLine("Not a valid choice. Try again.");//    }
-
-//}
