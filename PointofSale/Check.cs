@@ -5,10 +5,10 @@ namespace PointofSale
 	{
         public string Name { get; set; }
         public int BankInfo { get; set; }
-        public int Price { get; set; }
+        public decimal Price { get; set; }
 
         //constructor
-        public Check(string _name, int _bankinfo, int _price)
+        public Check(string _name, int _bankinfo, decimal _price)
         {
             Name = _name;
             BankInfo = _bankinfo;

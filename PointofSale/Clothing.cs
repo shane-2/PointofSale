@@ -37,7 +37,7 @@ namespace PointofSale
 
         public override string ToString()
         {
-            return base.ToString() + $"{Color} {Measurements} {Season}";
+            return base.ToString() + $" {Color} {Measurements} {Season}";
         }
 
 

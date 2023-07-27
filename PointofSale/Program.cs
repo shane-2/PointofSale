@@ -12,6 +12,7 @@ using PointofSale;
 
 
 using System.ComponentModel.Design;
+using System.Runtime;
 //List for shopping cart
 List<Merchandise> shopCart = new List<Merchandise>();
 //make List for items
@@ -99,7 +100,8 @@ while (runProgram)
             Console.WriteLine("Shopping Cart");
             DisplayMenu(shopCart);
 
-
+            Console.WriteLine("Press enter to continue.");
+            Console.ReadLine();
         }
 
         bool runProgram2 = true;
@@ -122,6 +124,7 @@ while (runProgram)
             {
                 Console.WriteLine("Invalid input");
             }
+            Console.WriteLine();
         }
         
     }
@@ -138,22 +141,159 @@ while (runProgram)
 
     //display receipt, items, totals, 
 }
-    
+decimal shipping = 0;
+    if(Ship(shopCart) == true)
+{
+    bool ship = true;
+    while (ship)
+    {
+        Console.WriteLine("We noticed you have some bigger items in your order.");
+        Console.WriteLine(" Would you like these items shipped? Enter y/n");
+        string yesno = Console.ReadLine().ToLower().Trim();
+        if (yesno == "y")
+        {
+           shipping = ShippingPrice(shopCart);
+            Console.WriteLine($"Shipping price: ${shipping}");
+            //add up shipping total on large items
+            ship = false;
+        }
+        else if (yesno == "n")
+        {
+            ship = false;    
+        }
+        else
+        {
+            Console.WriteLine("Invalid input");
+        }
+        Console.WriteLine();
+    }
+}
 
-Console.WriteLine("How would you like to pay? Enter:");Console.WriteLine("1 for Cash");Console.WriteLine("2 for Check");Console.WriteLine("3 for Credit");int input = int.Parse(Console.ReadLine());
+Console.WriteLine("How would you like to pay? Enter:");
+Console.WriteLine("1 for Cash");
+Console.WriteLine("2 for Check");
+Console.WriteLine("3 for Credit");
+
+int input = int.Parse(Console.ReadLine());
 
 decimal subtotal = 0;
 foreach (Merchandise t in shopCart)
 {
     subtotal += t.Price;
 }
-decimal salestax = Math.Round(subtotal, 2) * 0.06m;
-decimal grandtotal = (subtotal + salestax);
+decimal math = Math.Round(subtotal, 2) * 0.06m;
+decimal salestax = Math.Round(math, 2);
+decimal grandtotal = Math.Round(subtotal + salestax + shipping, 2);
 
-bool runPayment = true;while (runPayment){    if (input == 1)    {        Console.WriteLine("Enter the amount of cash tendered");        decimal cash = decimal.Parse(Console.ReadLine());        decimal change = cash - grandtotal;        Console.WriteLine($"{change} is your change, thank you for shopping with us!");    }    if (input == 2)    {        Console.WriteLine("Please enter your check number for payment");        Console.ReadLine();        Console.WriteLine("Thank you for shopping with us!");    }    if (input == 3)    {        Console.WriteLine("Please enter your card number, expiration date, and CVV");        Console.ReadLine();        Console.WriteLine("Thank you for shopping with us!");    }    else    {        Console.WriteLine("Not a valid choice. Try again.");    }
+bool runPayment = true;
+while (runPayment)
+{
+
+    if (input == 1)
+    {
+        Total(subtotal, salestax, grandtotal, shipping);
+        Console.WriteLine("Enter the amount of cash tendered");
+        decimal cash = decimal.Parse(Console.ReadLine());
+        decimal change = cash - grandtotal;
+        Console.WriteLine($"${change} is your change!");
+        runPayment = false;
+        break;
+    }
+
+    if (input == 2)
+    {
+        Total(subtotal, salestax, grandtotal, shipping);
+        Console.WriteLine("Please enter the check information in this format Name|check info|price");
+        
+        CheckPay();
+        
+        runPayment = false;
+        break;
+    }
+
+    if (input == 3)
+    {
+        Total(subtotal, salestax, grandtotal, shipping);
+        Console.WriteLine("Please enter your card number, expiration date, and CVV");
+        Console.ReadLine();
+        
+        runPayment = false;
+        break;
+    }
+    else
+    {
+        Console.WriteLine("Not a valid choice. Try again.");
+    }
 }
 
-    //methods
+Console.ReadLine();
+Console.WriteLine("Thank you for shopping with us! Here is your Receipt!");
+Receipt(subtotal, salestax, grandtotal, shipping, shopCart);
+
+//methods
+static void CheckPay()
+{
+    string filePath = "../../../Checks.txt";
+
+    if (File.Exists(filePath) == false)
+    {
+        StreamWriter tempWriter = new StreamWriter(filePath);
+        tempWriter.WriteLine("Name|123456789|0.00");
+        
+        tempWriter.Close();
+    }
+
+    StreamReader reader = new StreamReader(filePath);
+    List<Check> allChecks = new List<Check>();
+
+    while (true)
+    {
+        Console.WriteLine("Please enter your card number, expiration date, and CVV");
+        Console.ReadLine();
+        //name||bank number|| amount
+        string line = reader.ReadLine();
+        if (line == null)
+        {
+            break;
+        }
+        else
+        {
+            //name|bank|amount
+            string[] parts = line.Split("|");
+            //parts[0] = name
+            //part[1] = number
+            //part[2] = price
+
+            Check s = new Check(parts[0], int.Parse(parts[1]), decimal.Parse(parts[2]));
+            allChecks.Add(s);
+        }
+    }
+    reader.Close();
+
+}
+static void CardPay()
+{
+    //needs class and same logic as check 
+
+    //verification for length of numbers
+
+    //could also add verification that card is not expired
+}
+static void Total(decimal sub, decimal tax, decimal tot, decimal ship)
+{
+    Console.WriteLine("");
+    Console.WriteLine($"Sub total: ${sub}.");
+    Console.WriteLine($"Sales Tax: ${tax}.");
+    Console.WriteLine($"Shipping: ${ship}");
+    Console.WriteLine($"Grand Total: ${tot}.");
+    Console.WriteLine("");
+}
+static void Receipt(decimal sub, decimal tax, decimal tot, decimal ship, List<Merchandise> cart )
+{
+    DisplayMenu(cart);
+    
+    Total(sub, tax, tot, ship);
+}
     static void DisplayMenu(List<Merchandise> inventory)
     {
         for (int i = 0; i < inventory.Count; i++)
@@ -264,3 +404,25 @@ bool runPayment = true;while (runPayment){    if (input == 1)    {        
             return false;
         }
     }
+    //not done
+    static bool Ship(List<Merchandise> list)
+{
+    foreach(Merchandise i in list)
+    {
+        if (i.Size.ToLower().Trim() == "large")
+        {
+            return true;
+        }
+    }
+    return false;
+}
+static decimal ShippingPrice(List<Merchandise> cart)
+{
+    decimal s = 0;
+    foreach(Merchandise c in cart)
+        if (c.Size.Contains("large"))
+        {
+            s += 15.99m;
+        }
+            return s;
+}
