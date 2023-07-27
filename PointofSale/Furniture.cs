@@ -10,14 +10,14 @@ namespace PointofSale
     {
         public string Material { get; set; }
 
-        public Furniture(decimal _price, string _size, string _type, string _material) :
-         base(_price, _size, _type)
+        public Furniture(decimal _price, string _size, string _type, string _category, string _material) :
+         base(_price, _size, _type, _category)
         {
             Material = _material;
         }
         public override string ToString()
         {
-            return base.ToString() + $"{Material}.";
+            return base.ToString() + $" {Material}.";
         }
 
 

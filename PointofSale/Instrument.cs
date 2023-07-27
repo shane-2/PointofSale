@@ -12,15 +12,15 @@ namespace PointofSale
 
         public string Brand { get; set; }
 
-        public Instrument(decimal _price, string _size, string _type, string _brand) :
-         base(_price, _size, _type)
+        public Instrument(decimal _price, string _size, string _type, string _category, string _brand) :
+         base(_price, _size, _type, _category)
         {
             Brand = _brand;
         }
 
         public override string ToString()
         {
-            return base.ToString() + $"{Brand}.";
+            return base.ToString() + $" {Brand}.";
 
 
         }

@@ -13,16 +13,18 @@ namespace PointofSale
         public decimal Price { get; set; }
         //Small, Medium, Large
         public string Size { get; set; }
+        public string Category { get; set; }
         public string Type { get; set; }
         //public bool Shipped { get; set; }
 
         //constructors
-        public Merchandise(decimal _price, string _size, string _type)
+        public Merchandise(decimal _price, string _size, string _type, string _category)
         {
             Price = _price;
             //Shipped = _shipped;
             Size = _size;
             Type = _type;
+            Category = _category;
         }
 
         //methods

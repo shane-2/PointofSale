@@ -15,7 +15,7 @@ namespace PointofSale
         // Electronics(type, year, brand),
 
         //constructors
-        public Electronics(decimal _price, string _size, string _type, int _year, string _brand) : base ( _price, _size, _type)
+        public Electronics(decimal _price, string _size, string _type, string _category, int _year, string _brand) : base ( _price, _size, _type, _category)
         {
             Year = _year; 
             Brand = _brand;
@@ -25,8 +25,12 @@ namespace PointofSale
 
         public override string ToString()
         {
-            return base.ToString() + $"{Brand} {Year}.";
+            return base.ToString() + $" {Brand} {Year}.";
         }
+        //public void DisplayElectronics()
+        //{
+        //    for (int i = 0; i == )
+        //}
 
     }
 }

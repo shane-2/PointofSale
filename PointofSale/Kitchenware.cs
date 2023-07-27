@@ -13,7 +13,7 @@ namespace PointofSale
         public int Quantity { get; set; }
 
         //constructors
-        public Kitchenware(decimal _price, string _size, string _type, string _substance, int _quantity) : base (_price, _size, _type)
+        public Kitchenware(decimal _price, string _size, string _type, string _category, string _substance, int _quantity) : base (_price, _size, _type, _category)
         { 
             Substance = _substance;
             Quantity = _quantity;
@@ -23,7 +23,7 @@ namespace PointofSale
 
         public override string ToString()
         {
-            return base.ToString() + $"{Substance}{Quantity}.";
+            return base.ToString() + $" {Substance} {Quantity}.";
         }
 
     }
