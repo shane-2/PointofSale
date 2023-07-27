@@ -174,7 +174,7 @@ Console.WriteLine("1 for Cash");
 Console.WriteLine("2 for Check");
 Console.WriteLine("3 for Credit");
 
-int input = int.Parse(Console.ReadLine());
+    int input = int.Parse(Console.ReadLine());
 
 decimal subtotal = 0;
 foreach (Merchandise t in shopCart)
@@ -189,7 +189,7 @@ bool runPayment = true;
 while (runPayment)
 {
 
-    if (input == 1)
+    if (input == 1 )
     {
         Total(subtotal, salestax, grandtotal, shipping);
         Console.WriteLine("Enter the amount of cash tendered");
@@ -420,7 +420,7 @@ static decimal ShippingPrice(List<Merchandise> cart)
 {
     decimal s = 0;
     foreach(Merchandise c in cart)
-        if (c.Size.Contains("large"))
+        if (c.Size.ToLower().Trim().Contains("large"))
         {
             s += 15.99m;
         }
