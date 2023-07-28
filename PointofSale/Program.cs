@@ -12,7 +12,11 @@ using PointofSale;
 
 
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Runtime;
+using System.Xml.Linq;
+//List for checks
+List<Check> allChecks = new List<Check>();
 //List for shopping cart
 List<Merchandise> shopCart = new List<Merchandise>();
 //make List for items
@@ -204,10 +208,13 @@ while (runPayment)
     else if (input == 2)
     {
         Total(subtotal, salestax, grandtotal, shipping);
-        Console.WriteLine("Please enter the check information in this format Name|check info|price");
+        Console.WriteLine("Please enter the your name.");
+        string name = Console.ReadLine();
+        Console.WriteLine("Please enter your check number");
+        int check = int.Parse(Console.ReadLine());
+        CheckPay(name, check, grandtotal, allChecks);
 
 
-       
 
         runPayment = false;
         break;
@@ -232,46 +239,40 @@ Console.ReadLine();
 Console.WriteLine("Thank you for shopping with us! Here is your Receipt!");
 Receipt(subtotal, salestax, grandtotal, shipping, shopCart);
 
+
+
+
+
+
+//-------------------------------------------------------------------
 //methods
-static void CheckPay()
+
+static void CheckPay(string name, int bank, decimal total, List<Check> list)
 {
     string filePath = "../../../Checks.txt";
 
     if (File.Exists(filePath) == false)
     {
         StreamWriter tempWriter = new StreamWriter(filePath);
-        tempWriter.WriteLine("Name|123456789|0.00");
+        tempWriter.WriteLine("Name|Check Number|Amount");
        
         tempWriter.Close();
     }
 
-    StreamReader reader = new StreamReader(filePath);
-    List<Check> allChecks = new List<Check>();
-
-    while (true)
-    {
-        Console.WriteLine("Please enter your card number, expiration date, and CVV");
-        Console.ReadLine();
-        //name||bank number|| amount
-        string line = reader.ReadLine();
-        if (line == null)
+    
+        
+        //List<Check> allChecks = new List<Check>();
+        Check s = new Check(name, bank, total);
+        list.Add(s);
+        StreamWriter writer = new StreamWriter(filePath);
+        foreach (Check t in list)
         {
-            break;
+            writer.WriteLine($"{t.Name}|{t.BankInfo}|{t.Price}");
         }
-        else
-        {
-            //name|bank|amount
-            string[] parts = line.Split("|");
-            //parts[0] = name
-            //part[1] = number
-            //part[2] = price
-
-            Check s = new Check(parts[0], int.Parse(parts[1]), decimal.Parse(parts[2]));
-            allChecks.Add(s);
-        }
-    }
-    reader.Close();
-
+        
+        writer.Close();
+    
+    
 }
 static void CardPay()
 {
