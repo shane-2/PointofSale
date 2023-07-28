@@ -25,7 +25,7 @@ namespace PointofSale
 
         public override string ToString()
         {
-            return base.ToString() + $" {Brand} {Year}.";
+            return base.ToString() + String.Format("{0,-20} {1,-15}", Brand, Year);
         }
         //public void DisplayElectronics()
         //{

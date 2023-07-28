@@ -28,7 +28,7 @@ new Electronics( 34.95m, "Small",  "Toaster Oven","electronics", 2021, "Revoluti
 
 new Kitchenware( 9.95m, "Small", "Forks","kitchenware", "Stainless Steel", 10),
 new Kitchenware( 1500.00m, "Small", "Spatula","kitchenware", "Pure Gold", 1),
-new Kitchenware( 5.95m, " Small", "Amazon Dinner Plates","kitchenware", "Ceramic", 5),
+new Kitchenware( 5.95m, " Small", "Dinner Plates","kitchenware", "Ceramic", 5),
 new Kitchenware( 8.95m, " Small", "Steak Knives","kitchenware", "Stainless Steel", 5),
 new Kitchenware( 2.95m, " Small", "Soup Bowl","kitchenware", "Ceramic", 1),
 
@@ -81,6 +81,7 @@ while (runProgram)
                 Console.WriteLine($"{count}. {o}");
             }
             count = 0;
+            Console.WriteLine("");
             Console.WriteLine($"{options.Count + 1}. Return to Menu.");
             while (int.TryParse(Console.ReadLine(), out menuChoice) == false)
             {
@@ -283,10 +284,10 @@ static void CardPay()
 static void Total(decimal sub, decimal tax, decimal tot, decimal ship)
 {
     Console.WriteLine("");
-    Console.WriteLine($"Sub total: ${sub}.");
-    Console.WriteLine($"Sales Tax: ${tax}.");
+    Console.WriteLine($"Sub total: ${sub}");
+    Console.WriteLine($"Sales Tax: ${tax}");
     Console.WriteLine($"Shipping: ${ship}");
-    Console.WriteLine($"Grand Total: ${tot}.");
+    Console.WriteLine($"Grand Total: ${tot}");
     Console.WriteLine("");
 }
 static void Receipt(decimal sub, decimal tax, decimal tot, decimal ship, List<Merchandise> cart )

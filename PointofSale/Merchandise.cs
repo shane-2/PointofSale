@@ -30,7 +30,7 @@ namespace PointofSale
         //methods
         public override string ToString()
         {
-            return $"${Price} {Type}";
+            return "$" + String.Format("{0,-10} {1,-20}",Price, Type);
         }
 
         public string Shipped(string size)

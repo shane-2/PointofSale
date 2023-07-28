@@ -20,7 +20,7 @@ namespace PointofSale
 
         public override string ToString()
         {
-            return base.ToString() + $" {Brand}.";
+            return base.ToString() + String.Format("{0,-20}", Brand);
 
 
         }

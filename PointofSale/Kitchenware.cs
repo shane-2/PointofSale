@@ -23,7 +23,7 @@ namespace PointofSale
 
         public override string ToString()
         {
-            return base.ToString() + $" {Substance} {Quantity}.";
+            return base.ToString() + String.Format("{0,-20} {1,-15}", Substance, Quantity);
         }
 
     }

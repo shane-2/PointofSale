@@ -17,7 +17,7 @@ namespace PointofSale
         }
         public override string ToString()
         {
-            return base.ToString() + $" {Material}.";
+            return base.ToString() + String.Format("{0,-20}", Material);
         }
 
 
