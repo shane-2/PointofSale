@@ -200,18 +200,19 @@ while (runPayment)
         break;
     }
 
-    if (input == 2)
+    else if (input == 2)
     {
         Total(subtotal, salestax, grandtotal, shipping);
         Console.WriteLine("Please enter the check information in this format Name|check info|price");
-        
-        CheckPay();
-        
+
+
+       
+
         runPayment = false;
         break;
     }
 
-    if (input == 3)
+    else if (input == 3)
     {
         Total(subtotal, salestax, grandtotal, shipping);
         Console.WriteLine("Please enter your card number, expiration date, and CVV");
@@ -239,7 +240,7 @@ static void CheckPay()
     {
         StreamWriter tempWriter = new StreamWriter(filePath);
         tempWriter.WriteLine("Name|123456789|0.00");
-        
+       
         tempWriter.Close();
     }
 
