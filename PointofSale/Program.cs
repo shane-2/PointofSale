@@ -31,7 +31,7 @@ new Electronics( 219.95m, "Small",  "Xbox X","electronics", 2021, "Microsoft"),
 new Electronics( 34.95m, "Small",  "Toaster Oven","electronics", 2021, "Revolution"),
 
 new Kitchenware( 9.95m, "Small", "Forks","kitchenware", "Stainless Steel", 10),
-new Kitchenware( 1500.00m, "Small", "Spatula","kitchenware", "Pure Gold", 1),
+new Kitchenware( 1499.95m, "Small", "Spatula","kitchenware", "Pure Gold", 1),
 new Kitchenware( 5.95m, " Small", "Dinner Plates","kitchenware", "Ceramic", 5),
 new Kitchenware( 8.95m, " Small", "Steak Knives","kitchenware", "Stainless Steel", 5),
 new Kitchenware( 2.95m, " Small", "Soup Bowl","kitchenware", "Ceramic", 1),
@@ -193,7 +193,6 @@ decimal grandtotal = Math.Round(subtotal + salestax + shipping, 2);
 bool runPayment = true;
 while (runPayment)
 {
-
     if (input == 1 )
     {
         Total(subtotal, salestax, grandtotal, shipping);
@@ -208,12 +207,11 @@ while (runPayment)
     else if (input == 2)
     {
         Total(subtotal, salestax, grandtotal, shipping);
-        Console.WriteLine("Please enter the your name.");
+        Console.WriteLine("Please enter your name.");
         string name = Console.ReadLine();
         Console.WriteLine("Please enter your check number");
         int check = int.Parse(Console.ReadLine());
         CheckPay(name, check, grandtotal, allChecks);
-
 
 
         runPayment = false;
@@ -235,11 +233,11 @@ while (runPayment)
     }
 }
 
-Console.ReadLine();
 Console.WriteLine("Thank you for shopping with us! Here is your Receipt!");
 Receipt(subtotal, salestax, grandtotal, shipping, shopCart);
+Console.WriteLine($"Payment Method: {GetPay(input)}");
 
-
+Console.ReadLine();
 
 
 
@@ -285,10 +283,10 @@ static void CardPay()
 static void Total(decimal sub, decimal tax, decimal tot, decimal ship)
 {
     Console.WriteLine("");
-    Console.WriteLine($"Sub total: ${sub}");
-    Console.WriteLine($"Sales Tax: ${tax}");
-    Console.WriteLine($"Shipping: ${ship}");
-    Console.WriteLine($"Grand Total: ${tot}");
+    Console.WriteLine(String.Format("{0,-20}${1,-15}","Subtotal:", sub));
+    Console.WriteLine(String.Format("{0,-20}${1,-15}","Sales Tax:", tax));
+    Console.WriteLine(String.Format("{0,-20}${1,-15}","Shipping:", ship));
+    Console.WriteLine(String.Format("{0,-20}${1,-15}","Grand Total:", tot));
     Console.WriteLine("");
 }
 static void Receipt(decimal sub, decimal tax, decimal tot, decimal ship, List<Merchandise> cart )
@@ -428,4 +426,26 @@ static decimal ShippingPrice(List<Merchandise> cart)
             s += 15.99m;
         }
             return s;
+}
+
+static string GetPay(int input)
+{
+    if (input == 1)
+    {
+       return "Cash";
+    }
+
+    else if (input == 2)
+    {
+        return"Check";
+    }
+
+    else if (input == 3)
+    {
+        return"Credit";
+    }
+    else
+    {
+        return"";
+    }
 }
