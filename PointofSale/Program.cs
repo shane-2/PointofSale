@@ -17,6 +17,8 @@ using System.Runtime;
 using System.Xml.Linq;
 //List for checks
 List<Check> allChecks = new List<Check>();
+//list for cards
+List<CreditCard> credit = new List<CreditCard>();
 //List for shopping cart
 List<Merchandise> shopCart = new List<Merchandise>();
 //make List for items
@@ -78,7 +80,7 @@ while (runProgram)
         while (itemChoice <= 0 || itemChoice >= count + 1)
         {
             Console.WriteLine("");
-            Console.WriteLine($"Enter an item number to add to Cart or {options.Count + 1} to return. ");
+            Console.WriteLine($"Enter an item number to add to your Shopping cart or {options.Count + 1} to return. ");
             foreach (Merchandise o in options)
             {
                 count++;
@@ -87,9 +89,10 @@ while (runProgram)
             count = 0;
             Console.WriteLine("");
             Console.WriteLine($"{options.Count + 1}. Return to Menu.");
+            
             while (int.TryParse(Console.ReadLine(), out menuChoice) == false)
             {
-                Console.WriteLine("Incorrect Format");
+                Console.WriteLine($"Incorrect Format, please enter a number 1 - {options.Count + 1}");
             }
             if(menuChoice < options.Count + 1)
             {
@@ -101,7 +104,7 @@ while (runProgram)
                 break;
 
             }
-            Console.WriteLine("");
+            Console.Clear();
             Console.WriteLine("Shopping Cart");
             DisplayMenu(shopCart);
 
@@ -116,12 +119,14 @@ while (runProgram)
             string yesno = Console.ReadLine().ToLower().Trim();
             if (yesno == "y")
             {
+                Console.Clear();
                 runProgram = false;
                 runProgram2 = false;
                 menuChoice = 1;
             }
             else if (yesno == "n")
             {
+                Console.Clear();
                 runProgram = true;
                 runProgram2 = false;
             }
@@ -173,6 +178,8 @@ decimal shipping = 0;
         Console.WriteLine();
     }
 }
+Console.WriteLine("Please enter the your name.");
+string name = Console.ReadLine();
 
 Console.WriteLine("How would you like to pay? Enter:");
 Console.WriteLine("1 for Cash");
@@ -208,14 +215,8 @@ while (runPayment)
     else if (input == 2)
     {
         Total(subtotal, salestax, grandtotal, shipping);
-        Console.WriteLine("Please enter the your name.");
-        string name = Console.ReadLine();
-        Console.WriteLine("Please enter your check number");
-        int check = int.Parse(Console.ReadLine());
-        CheckPay(name, check, grandtotal, allChecks);
-
-
-
+        
+        CheckPay(name, grandtotal, allChecks);
         runPayment = false;
         break;
     }
@@ -223,9 +224,8 @@ while (runPayment)
     else if (input == 3)
     {
         Total(subtotal, salestax, grandtotal, shipping);
-        Console.WriteLine("Please enter your card number, expiration date, and CVV");
-        Console.ReadLine();
-        
+    
+        CardPay(name, grandtotal, credit);
         runPayment = false;
         break;
     }
@@ -235,8 +235,6 @@ while (runPayment)
     }
 }
 
-Console.ReadLine();
-Console.WriteLine("Thank you for shopping with us! Here is your Receipt!");
 Receipt(subtotal, salestax, grandtotal, shipping, shopCart);
 
 
@@ -247,10 +245,109 @@ Receipt(subtotal, salestax, grandtotal, shipping, shopCart);
 //-------------------------------------------------------------------
 //methods
 
-static void CheckPay(string name, int bank, decimal total, List<Check> list)
+static void CardPay(string name, decimal total, List<CreditCard> list)
+{
+    long card1 = 0;
+    int exp1 = 0;
+    int cvv1 = 0;
+    string filePathcc = "../../../CreditCard.txt";
+    int x = 0;
+    while (x == 0)
+    {
+    Console.WriteLine("What is your card number?");
+    string card = Console.ReadLine().Trim();
+    
+    Console.WriteLine("What is the expiration date?");
+    string exp = Console.ReadLine().Trim();
+    Console.WriteLine("What is your CVV number?");
+    string cvv = Console.ReadLine().Trim();
+        if (card.Length == 16 && exp.Length == 4 && cvv.Length == 3  )
+        {
+            try
+            {
+
+             card1 = long.Parse(card);
+             exp1 = int.Parse(exp);
+             cvv1 = int.Parse(cvv);
+            x++;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Invalid card info. Please try again.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid card info. Please try again.");
+        }
+    }
+
+    if (File.Exists(filePathcc) == false)
+    {
+        StreamWriter tempWriter = new StreamWriter(filePathcc);
+        tempWriter.WriteLine("Name|Card Number|Expiration|CVV|Amount");
+
+        tempWriter.Close();
+    }
+    
+    StreamReader reader = new StreamReader(filePathcc);
+    while (true)
+    {
+        //name||long number||int exp|| cvv ||decimal price
+        string line = reader.ReadLine();
+        if (line == null)
+        {
+            break;
+        }
+        else
+        {
+            string[] parts = line.Split("|");
+            CreditCard newCard = new CreditCard(parts[0], long.Parse(parts[1]), int.Parse(parts[2]), int.Parse(parts[3]), decimal.Parse(parts[4]));
+            list.Add(newCard);
+        }
+    }
+    reader.Close();
+
+    CreditCard s = new CreditCard(name, card1, exp1, cvv1, total);
+    list.Add(s);
+    StreamWriter writer = new StreamWriter(filePathcc);
+    foreach (CreditCard t in list)
+    {
+        writer.WriteLine($"{t.Name}|{t.Number}|{t.Expiration}|{t.CVV}|{t.Price}");
+    }
+
+    writer.Close();
+}
+static void CheckPay(string name, decimal total, List<Check> list)
 {
     string filePath = "../../../Checks.txt";
+    int check1 = 0;
+    int x = 0;
+    while (x == 0)
+    {
+    Console.WriteLine("What is your 8 digit check number?");
+    string check = Console.ReadLine();
+        if (check.Length == 8)
+        {
+            try
+            {
 
+           check1 = int.Parse(check);
+            x++;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Invalid check number");
+            }
+
+            
+        }
+        else
+        {
+            Console.WriteLine("Invalid check number");
+        }
+
+    }
     if (File.Exists(filePath) == false)
     {
         StreamWriter tempWriter = new StreamWriter(filePath);
@@ -259,10 +356,26 @@ static void CheckPay(string name, int bank, decimal total, List<Check> list)
         tempWriter.Close();
     }
 
-    
-        
-        //List<Check> allChecks = new List<Check>();
-        Check s = new Check(name, bank, total);
+    StreamReader reader = new StreamReader(filePath);
+    while (true)
+    {
+        //name|| number|| price
+        string line = reader.ReadLine();
+        if (line == null)
+        {
+            break;
+        }
+        else
+        {
+            string[] parts = line.Split("|");
+            Check newcheck = new Check(parts[0], int.Parse(parts[1]), decimal.Parse(parts[2]));
+            list.Add(newcheck);
+        }
+    }
+    reader.Close();
+
+    //List<Check> allChecks = new List<Check>();
+    Check s = new Check(name, check1, total);
         list.Add(s);
         StreamWriter writer = new StreamWriter(filePath);
         foreach (Check t in list)
@@ -273,14 +386,6 @@ static void CheckPay(string name, int bank, decimal total, List<Check> list)
         writer.Close();
     
     
-}
-static void CardPay()
-{
-    //needs class and same logic as check 
-
-    //verification for length of numbers
-
-    //could also add verification that card is not expired
 }
 static void Total(decimal sub, decimal tax, decimal tot, decimal ship)
 {
@@ -293,10 +398,12 @@ static void Total(decimal sub, decimal tax, decimal tot, decimal ship)
 }
 static void Receipt(decimal sub, decimal tax, decimal tot, decimal ship, List<Merchandise> cart )
 {
+    Console.WriteLine("Thank you for shopping with us! Here is your Receipt!");
     DisplayMenu(cart);
     
     Total(sub, tax, tot, ship);
 }
+
     static void DisplayMenu(List<Merchandise> inventory)
     {
         for (int i = 0; i < inventory.Count; i++)
@@ -421,11 +528,11 @@ static void Receipt(decimal sub, decimal tax, decimal tot, decimal ship, List<Me
 }
 static decimal ShippingPrice(List<Merchandise> cart)
 {
-    decimal s = 0;
+    decimal s = 9.99m;
     foreach(Merchandise c in cart)
         if (c.Size.ToLower().Trim().Contains("large"))
         {
-            s += 15.99m;
+            s += 2.78m;
         }
             return s;
 }
