@@ -244,7 +244,7 @@ List<Merchandise> shopCart = new List<Merchandise>();
 
     Receipt(subtotal, salestax, grandtotal, shipping, shopCart);
     Console.WriteLine($"Payment Method: {GetPay(input)}");
-    //StoreList(blank);
+    StoreList(blank);
     //Console.ReadLine();
     while (true)
     {
@@ -277,7 +277,7 @@ static void StoreList(List<StoreOrder> list)
     if (File.Exists(filePath) == false)
     {
         StreamWriter tempWriter = new StreamWriter(filePath);
-        tempWriter.WriteLine("name " + 0.00m + " payment");
+        tempWriter.WriteLine("name|" + 0.00m + "|payment");
 
         tempWriter.Close();
     }
