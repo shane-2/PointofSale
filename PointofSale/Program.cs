@@ -214,8 +214,8 @@ List<Merchandise> shopCart = new List<Merchandise>();
             decimal cash = decimal.Parse(Console.ReadLine());
             decimal change = cash - grandtotal;
             Console.WriteLine($"${change} is your change!");
-            string input1 = "cash";
-            StoreOrder p = new StoreOrder(name, grandtotal, input1);
+           
+            StoreOrder p = new StoreOrder(name, grandtotal, "cash");
             blank.Add(p);
             runPayment = false;
             break;
@@ -227,8 +227,8 @@ List<Merchandise> shopCart = new List<Merchandise>();
 
             CheckPay(name, grandtotal, allChecks);
 
-            string input2 = "check";
-            StoreOrder p = new StoreOrder(name, grandtotal, input2);
+            
+            StoreOrder p = new StoreOrder(name, grandtotal, "check");
             blank.Add(p);
             runPayment = false;
             break;
@@ -239,8 +239,8 @@ List<Merchandise> shopCart = new List<Merchandise>();
             Total(subtotal, salestax, grandtotal, shipping);
 
             CardPay(name, grandtotal, credit);
-            string input3 = "credit";
-            StoreOrder p = new StoreOrder(name, grandtotal, input3);
+            
+            StoreOrder p = new StoreOrder(name, grandtotal, "credit");
             blank.Add( p);
             runPayment = false;
             break;
