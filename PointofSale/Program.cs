@@ -8,20 +8,15 @@
 // Electronics(type, year, brand),
 // Instruments(type(percussion, string, woodwind, brass), brand(Gibson, Fender, Yamaha, Kawai)) 
 
+using CircleLab;
 using PointofSale;
 
 
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Runtime;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
-//List for checks
-List<Check> allChecks = new List<Check>();
-//list for cards
-List<CreditCard> credit = new List<CreditCard>();
-//List for shopping cart
-List<Merchandise> shopCart = new List<Merchandise>();
-//make List for items
 
 List<Merchandise> inventory = new List<Merchandise>()
 {
@@ -56,79 +51,121 @@ new Clothing(4.95m,"Small","Tigers Hat","Clothing","Summer","L","Blue"),
 new Clothing(14.95m,"Small","Morph Suit","Clothing","All Season","XXS","Neon Green"),
 new Clothing(9.95m,"Medium","Snowpants","Clothing","Winter", "XXL","Camoflauge")
 };
-
-bool runProgram = true;
-while (runProgram)
+bool stillShopping = true;
+while (stillShopping)
 {
-    int menuChoice = 0;
-    while (menuChoice <= 0 || menuChoice >= 5)
+    //storelist
+List<StoreOrder> blank = new List<StoreOrder>();
+//List for checks
+List<Check> allChecks = new List<Check>();
+//list for cards
+List<CreditCard> credit = new List<CreditCard>();
+//List for shopping cart
+List<Merchandise> shopCart = new List<Merchandise>();
+    //make List for items
+    Console.WriteLine("Hey Macklemore, Can we go Thrift Shopping?");
+    bool runProgram = true;
+    while (runProgram)
     {
-        Console.WriteLine($"Please select the Category you are looking for!");
-        Console.WriteLine("1. Electronics");
-        Console.WriteLine("2. KitchenWare");
-        Console.WriteLine("3. Furniture");
-        Console.WriteLine("4. Instruments");
-        Console.WriteLine("5. Clothes and Apparel");
-        while (int.TryParse(Console.ReadLine(), out menuChoice) == false)
+        int menuChoice = 0;
+        while (menuChoice <= 0 || menuChoice >= 5)
         {
-            Console.WriteLine("Incorrect Format");
-        }
-        
-        List<Merchandise> options = MenuCategory(menuChoice, inventory);
-        int itemChoice = 0;
-        int count = 0;
-        while (itemChoice <= 0 || itemChoice >= count + 1)
-        {
-            Console.WriteLine("");
-            Console.WriteLine($"Enter an item number to add to your Shopping cart or {options.Count + 1} to return. ");
-            foreach (Merchandise o in options)
-            {
-                count++;
-                Console.WriteLine($"{count}. {o}");
-            }
-            count = 0;
-            Console.WriteLine("");
-            Console.WriteLine($"{options.Count + 1}. Return to Menu.");
             
+            Console.WriteLine($"Please select the Category you are looking for!");
+            Console.WriteLine("1. Electronics");
+            Console.WriteLine("2. KitchenWare");
+            Console.WriteLine("3. Furniture");
+            Console.WriteLine("4. Instruments");
+            Console.WriteLine("5. Clothes and Apparel");
             while (int.TryParse(Console.ReadLine(), out menuChoice) == false)
             {
-                Console.WriteLine($"Incorrect Format, please enter a number 1 - {options.Count + 1}");
+                Console.WriteLine("Incorrect Format");
             }
-            if(menuChoice < options.Count + 1)
-            {
-                shopCart.Add(options[menuChoice -1]);
-            }
-            else if(menuChoice == options.Count + 1)
-            {
-                itemChoice = menuChoice;
-                break;
 
-            }
-            Console.Clear();
-            Console.WriteLine("Shopping Cart");
-            DisplayMenu(shopCart);
+            List<Merchandise> options = MenuCategory(menuChoice, inventory);
+            int itemChoice = 0;
+            int count = 0;
+            while (itemChoice <= 0 || itemChoice >= count + 1)
+            {
+                Console.WriteLine("");
+                Console.WriteLine($"Enter an item number to add to your Shopping cart or {options.Count + 1} to return. ");
+                foreach (Merchandise o in options)
+                {
+                    count++;
+                    Console.WriteLine($"{count}. {o}");
+                }
+                count = 0;
+                Console.WriteLine("");
+                Console.WriteLine($"{options.Count + 1}. Return to Menu.");
 
-            Console.WriteLine("Press enter to continue.");
-            Console.ReadLine();
+                while (int.TryParse(Console.ReadLine(), out menuChoice) == false)
+                {
+                    Console.WriteLine($"Incorrect Format, please enter a number 1 - {options.Count + 1}");
+                }
+                if (menuChoice < options.Count + 1)
+                {
+                    shopCart.Add(options[menuChoice - 1]);
+                }
+                else if (menuChoice == options.Count + 1)
+                {
+                    itemChoice = menuChoice;
+                    break;
+
+                }
+                Console.Clear();
+                Console.WriteLine("Shopping Cart");
+                DisplayMenu(shopCart);
+
+                Console.WriteLine("Press enter to continue.");
+                Console.ReadLine();
+            }
+
+            bool runProgram2 = true;
+            while (runProgram2)
+            {
+                Console.WriteLine("Are you ready to check out? Enter y/n");
+                string yesno = Console.ReadLine().ToLower().Trim();
+                if (yesno == "y")
+                {
+                    Console.Clear();
+                    runProgram = false;
+                    runProgram2 = false;
+                    menuChoice = 1;
+                }
+                else if (yesno == "n")
+                {
+                    Console.Clear();
+                    runProgram = true;
+                    runProgram2 = false;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input");
+                }
+                Console.WriteLine();
+            }
+
         }
-
-        bool runProgram2 = true;
-        while (runProgram2)
+    }
+    decimal shipping = 0;
+    if (Ship(shopCart) == true)
+    {
+        bool ship = true;
+        while (ship)
         {
-            Console.WriteLine("Are you ready to check out? Enter y/n");
+            Console.WriteLine("We noticed you have some bigger items in your order.");
+            Console.WriteLine(" Would you like these items shipped? Enter y/n");
             string yesno = Console.ReadLine().ToLower().Trim();
             if (yesno == "y")
             {
-                Console.Clear();
-                runProgram = false;
-                runProgram2 = false;
-                menuChoice = 1;
+                shipping = ShippingPrice(shopCart);
+                Console.WriteLine($"Shipping price: ${shipping}");
+                //add up shipping total on large items
+                ship = false;
             }
             else if (yesno == "n")
             {
-                Console.Clear();
-                runProgram = true;
-                runProgram2 = false;
+                ship = false;
             }
             else
             {
@@ -136,109 +173,145 @@ while (runProgram)
             }
             Console.WriteLine();
         }
-        
     }
-}
-decimal shipping = 0;
-    if(Ship(shopCart) == true)
-{
-    bool ship = true;
-    while (ship)
-    {
-        Console.WriteLine("We noticed you have some bigger items in your order.");
-        Console.WriteLine(" Would you like these items shipped? Enter y/n");
-        string yesno = Console.ReadLine().ToLower().Trim();
-        if (yesno == "y")
-        {
-           shipping = ShippingPrice(shopCart);
-            Console.WriteLine($"Shipping price: ${shipping}");
-            //add up shipping total on large items
-            ship = false;
-        }
-        else if (yesno == "n")
-        {
-            ship = false;    
-        }
-        else
-        {
-            Console.WriteLine("Invalid input");
-        }
-        Console.WriteLine();
-    }
-}
-Console.WriteLine("Please enter the your name.");
-string name = Console.ReadLine();
+    Console.WriteLine("Please enter your name.");
+    string name = Console.ReadLine();
 
-Console.WriteLine("How would you like to pay? Enter:");
-Console.WriteLine("1 for Cash");
-Console.WriteLine("2 for Check");
-Console.WriteLine("3 for Credit");
+    Console.WriteLine("How would you like to pay? Enter:");
+    Console.WriteLine("1 for Cash");
+    Console.WriteLine("2 for Check");
+    Console.WriteLine("3 for Credit");
 
     int input = int.Parse(Console.ReadLine());
 
-decimal subtotal = 0;
-foreach (Merchandise t in shopCart)
-{
-    subtotal += t.Price;
-}
-decimal math = Math.Round(subtotal, 2) * 0.06m;
-decimal salestax = Math.Round(math, 2);
-decimal grandtotal = Math.Round(subtotal + salestax + shipping, 2);
-
-bool runPayment = true;
-while (runPayment)
-{
-    if (input == 1 )
+    decimal subtotal = 0;
+    foreach (Merchandise t in shopCart)
     {
-        Total(subtotal, salestax, grandtotal, shipping);
-        Console.WriteLine("Enter the amount of cash tendered");
-        decimal cash = decimal.Parse(Console.ReadLine());
-        decimal change = cash - grandtotal;
-        Console.WriteLine($"${change} is your change!");
-        runPayment = false;
-        break;
+        subtotal += t.Price;
     }
+    decimal math = Math.Round(subtotal, 2) * 0.06m;
+    decimal salestax = Math.Round(math, 2);
+    decimal grandtotal = Math.Round(subtotal + salestax + shipping, 2);
 
-    else if (input == 2)
+    bool runPayment = true;
+    while (runPayment)
     {
-        Total(subtotal, salestax, grandtotal, shipping);
+        if (input == 1)
+        {
+            Total(subtotal, salestax, grandtotal, shipping);
+            Console.WriteLine("Enter the amount of cash tendered");
+            decimal cash = decimal.Parse(Console.ReadLine());
+            decimal change = cash - grandtotal;
+            Console.WriteLine($"${change} is your change!");
+            string input1 = "cash";
+            StoreOrder p = new StoreOrder(name, grandtotal, input1);
+            blank.Add(p);
+            runPayment = false;
+            break;
+        }
 
-        CheckPay(name, grandtotal, allChecks);
+        else if (input == 2)
+        {
+            Total(subtotal, salestax, grandtotal, shipping);
 
+            CheckPay(name, grandtotal, allChecks);
 
+            string input2 = "check";
+            StoreOrder p = new StoreOrder(name, grandtotal, input2);
+            blank.Add(p);
+            runPayment = false;
+            break;
+        }
 
-        runPayment = false;
-        break;
+        else if (input == 3)
+        {
+            Total(subtotal, salestax, grandtotal, shipping);
+
+            CardPay(name, grandtotal, credit);
+            string input3 = "credit";
+            StoreOrder p = new StoreOrder(name, grandtotal, input3);
+            blank.Add( p);
+            runPayment = false;
+            break;
+        }
+        else
+        {
+            Console.WriteLine("Not a valid choice. Try again.");
+        }
     }
-
-    else if (input == 3)
-    {
-        Total(subtotal, salestax, grandtotal, shipping);
     
-        CardPay(name, grandtotal, credit);
-        runPayment = false;
-        break;
+
+
+    Receipt(subtotal, salestax, grandtotal, shipping, shopCart);
+    Console.WriteLine($"Payment Method: {GetPay(input)}");
+    //StoreList(blank);
+    //Console.ReadLine();
+    while (true)
+    {
+
+    Console.WriteLine("Would you place another order? y/n");
+    string shop = Console.ReadLine().ToLower().Trim();
+    if (shop == "y")
+    {
+        stillShopping = true;
+            break;
+    }
+    else if (shop == "n")
+    {
+        stillShopping = false;
+            break;
     }
     else
     {
-        Console.WriteLine("Not a valid choice. Try again.");
+            Console.WriteLine("Invalid input, please enter y/n.");
+        }
     }
 }
-
-
-Console.WriteLine("Thank you for shopping with us! Here is your Receipt!");
-
-Receipt(subtotal, salestax, grandtotal, shipping, shopCart);
-Console.WriteLine($"Payment Method: {GetPay(input)}");
-
-Console.ReadLine();
-
-
 
 
 //-------------------------------------------------------------------
 //methods
+static void StoreList(List<StoreOrder> list)
+{
+    string filePath = "../../../NewList1.txt";
+    if (File.Exists(filePath) == false)
+    {
+        StreamWriter tempWriter = new StreamWriter(filePath);
+        tempWriter.WriteLine("name " + 0.00m + " payment");
 
+        tempWriter.Close();
+    }
+    StreamReader reader = new StreamReader(filePath);
+    while (true)
+    {
+        //name|| number|| price
+        string line = reader.ReadLine();
+        if (line == null)
+        {
+            break;
+        }
+        else
+        {
+            string[] parts = line.Split("|");
+            StoreOrder neworder = new StoreOrder((parts[0]), decimal.Parse(parts[1]), parts[2]);
+            list.Add(neworder);
+        }
+    }
+    reader.Close();
+
+    //List<Check> allChecks = new List<Check>();
+    //Merchandise s = new Merchandise(name, check1, total);
+    //list.Add(s);
+    StreamWriter writer = new StreamWriter(filePath);
+    foreach (StoreOrder t in list)
+    {
+        writer.WriteLine($"{t.Name}|{t.Total}|{t.PaymentMethod}");
+        
+    }
+
+    writer.Close();
+
+}
 static void CardPay(string name, decimal total, List<CreditCard> list)
 {
     long card1 = 0;
