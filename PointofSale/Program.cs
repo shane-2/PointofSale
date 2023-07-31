@@ -26,31 +26,37 @@ new Electronics( 89.95m, "Large",  "70 Inch T.V.","electronics", 2020, "Samsung"
 new Electronics( 119.95m, "Large",  "Refridgerator","electronics", 2019, "Samsung"),
 new Electronics( 219.95m, "Small",  "Xbox X","electronics", 2021, "Microsoft"),
 new Electronics( 34.95m, "Small",  "Toaster Oven","electronics", 2021, "Revolution"),
+new Electronics( .99m, "Small", "Broken Shakeweight", "electronics", 2011, "Fitness IQ"),
 
 new Kitchenware( 9.95m, "Small", "Forks","kitchenware", "Stainless Steel", 10),
 new Kitchenware( 1499.95m, "Small", "Spatula","kitchenware", "Pure Gold", 1),
 new Kitchenware( 5.95m, " Small", "Dinner Plates","kitchenware", "Ceramic", 5),
 new Kitchenware( 8.95m, " Small", "Steak Knives","kitchenware", "Stainless Steel", 5),
 new Kitchenware( 2.95m, " Small", "Soup Bowl","kitchenware", "Ceramic", 1),
+new Kitchenware( .99m, "Small", "Spork", "kitchenware", "Plastic", 1),
 
 new Furniture(59.95m, " Large", "Desk", "furniture", "Wood"),
 new Furniture(95.95m, " Large", "Couch","furniture","Leather"),
 new Furniture(9.95m, " Medium", "Chair","furniture", "Wood"),
 new Furniture(19.95m," Medium","Barstool","furniture", "Metal"),
 new Furniture(29.95m," Medium","Nightstand","furniture", "Wood"),
+new Furniture( .99m, "Medium", "Very Creepy Lamp", "furniture", "Porcelain"),
 
 new Instrument(65.95m," Medium","Guitar","instrument","Fender"),
 new Instrument(2.95m," Small","Recorder","instrument", "Yamaha"),
 new Instrument(139.95m," Medium","Saxophone","instrument", "Cannonball"),
 new Instrument(99.95m, " Medium","Guitar","instrument", "Gibson"),
 new Instrument(165.95m," Large","Drumset","instrument", "Pearl"),
+new Instrument(.99m, "Small", "Birthday Kazoo", "instrument", "Homemade"),
 
 new Clothing(2.95m,"Small","Tie Dye Tee","Clothing","All Season","XL","Tie Dye"),
 new Clothing(79.95m,"Medium","Fur Coat","Clothing","Winter","M","Brown"),
 new Clothing(4.95m,"Small","Tigers Hat","Clothing","Summer","L","Blue"),
 new Clothing(14.95m,"Small","Morph Suit","Clothing","All Season","XXS","Neon Green"),
-new Clothing(9.95m,"Medium","Snowpants","Clothing","Winter", "XXL","Camoflauge")
+new Clothing(9.95m,"Medium","Snowpants","Clothing","Winter", "XXL","Camoflauge"),
+new Clothing( .99m, "Small", "Macklemore's Boxers", "Clothing","All Season", "L", "Polka Dot")
 };
+
 bool stillShopping = true;
 while (stillShopping)
 {
@@ -113,6 +119,11 @@ List<Merchandise> shopCart = new List<Merchandise>();
 
                 }
                 Console.Clear();
+                    if (options[menuChoice - 1].Price == 0.99m)
+                    {
+                    Console.WriteLine("But shit, it was 99 cents!!");
+                    Console.WriteLine("");
+                    }
                 Console.WriteLine("Shopping Cart");
                 DisplayMenu(shopCart);
 
