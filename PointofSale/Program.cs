@@ -76,7 +76,7 @@ List<Merchandise> shopCart = new List<Merchandise>();
         int menuChoice = 0;
         while (menuChoice <= 0 || menuChoice >= 5)
         {
-            
+
             Console.WriteLine($"Please select the Category you are looking for!");
             Console.WriteLine("1. Electronics");
             Console.WriteLine("2. KitchenWare");
@@ -87,7 +87,7 @@ List<Merchandise> shopCart = new List<Merchandise>();
             {
                 Console.WriteLine("Incorrect Format");
             }
-
+        }
             List<Merchandise> options = MenuCategory(menuChoice, inventory);
             int itemChoice = 0;
             int count = 0;
@@ -104,11 +104,11 @@ List<Merchandise> shopCart = new List<Merchandise>();
                 Console.WriteLine("");
                 Console.WriteLine($"{options.Count + 1}. Return to Menu.");
 
-                while (int.TryParse(Console.ReadLine(), out menuChoice) == false)
+                while (int.TryParse(Console.ReadLine(), out menuChoice) == false || menuChoice > options.Count + 1 || menuChoice < 1)
                 {
                     Console.WriteLine($"Incorrect Format, please enter a number 1 - {options.Count + 1}");
                 }
-                if (menuChoice < options.Count + 1)
+                if (menuChoice < options.Count + 1 )
                 {
                     shopCart.Add(options[menuChoice - 1]);
                 }
@@ -119,11 +119,14 @@ List<Merchandise> shopCart = new List<Merchandise>();
 
                 }
                 Console.Clear();
-                    if (options[menuChoice - 1].Price == 0.99m)
-                    {
+            if (menuChoice < options.Count +1)
+            {
+                if (options[menuChoice - 1].Price == 0.99m)
+                {
                     Console.WriteLine("But shit, it was 99 cents!!");
                     Console.WriteLine("");
-                    }
+                }
+            }
                 Console.WriteLine("Shopping Cart");
                 DisplayMenu(shopCart);
 
@@ -156,7 +159,7 @@ List<Merchandise> shopCart = new List<Merchandise>();
                 Console.WriteLine();
             }
 
-        }
+        
     }
     decimal shipping = 0;
     if (Ship(shopCart) == true)
@@ -192,8 +195,7 @@ List<Merchandise> shopCart = new List<Merchandise>();
     Console.WriteLine("1 for Cash");
     Console.WriteLine("2 for Check");
     Console.WriteLine("3 for Credit");
-
-    int input = int.Parse(Console.ReadLine());
+    int input = 0;
 
     decimal subtotal = 0;
     foreach (Merchandise t in shopCart)
@@ -207,6 +209,11 @@ List<Merchandise> shopCart = new List<Merchandise>();
     bool runPayment = true;
     while (runPayment)
     {
+        while (int.TryParse(Console.ReadLine(), out input) == false)
+        {
+            Console.WriteLine("Incorrect Format");
+        }
+        
         if (input == 1)
         {
             Total(subtotal, salestax, grandtotal, shipping);
