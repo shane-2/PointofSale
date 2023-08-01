@@ -74,7 +74,7 @@ List<Merchandise> shopCart = new List<Merchandise>();
     while (runProgram)
     {
         int menuChoice = 0;
-        while (menuChoice <= 0 || menuChoice >= 5)
+        while (menuChoice <= 0 || menuChoice > 5)
         {
 
             Console.WriteLine($"Please select the Category you are looking for!");
